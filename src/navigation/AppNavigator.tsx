@@ -5,6 +5,8 @@ import { RootStackParamList } from '../types/navigation';
 import StartupPage from '../screens/StartupPage';
 import LoginPage from '../screens/LoginPage';
 import SignupPage from '../screens/SignupPage';
+import HomePage from '../screens/HomePage';
+import ProfilePage from '../screens/ProfilePage';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -14,6 +16,8 @@ const AppNavigator = () => (
       <Stack.Screen name="Startup" component={StartupPage} options={{ title: 'Welcome' }} />
       <Stack.Screen name="Login" component={LoginPage} />
       <Stack.Screen name="Signup" component={SignupPage} />
+      <Stack.Screen name="Home" component={HomePage} />
+      <Stack.Screen name="Profile" component={ProfilePage} />
     </Stack.Navigator>
   </NavigationContainer>
 );

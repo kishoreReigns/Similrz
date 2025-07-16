@@ -4,7 +4,7 @@
     "slug": "similrz",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/icon-only.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
@@ -17,8 +17,8 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/icon-foreground.png",
+        "backgroundColor": "./assets/icon-background.png"
       },
       "edgeToEdgeEnabled": true,
       "package": "com.kishore0109.similrz"
