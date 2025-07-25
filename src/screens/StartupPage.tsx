@@ -46,6 +46,24 @@ const StartupPage = () => {
     }
   }, [response]);
 
+  React.useEffect(() => {
+    const checkAuthToken = async () => {
+      let token = null;
+      try {
+        token = localStorage.getItem('authToken');
+      } catch (e) {
+        try {
+          const AsyncStorage = require('@react-native-async-storage/async-storage').default;
+          token = await AsyncStorage.getItem('authToken');
+        } catch {}
+      }
+      if (token) {
+        navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
+      }
+    };
+    checkAuthToken();
+  }, [navigation]);
+
   return (
     <View style={styles.container}>
      <View style={styles.similrzLogo}>
@@ -67,10 +85,10 @@ const StartupPage = () => {
         <SubmitButton style={[styles.button, styles.signupButton]} onPress={() => navigation.navigate('Signup')}>
           <Text style={[styles.buttonText, styles.signupButtonText]}>Signup</Text>
         </SubmitButton>
-        <Pressable style={styles.googleButton} onPress={() => promptAsync()} disabled={!request}>
+        {/* <Pressable style={styles.googleButton} onPress={() => promptAsync()} disabled={!request}>
           <Text style={styles.googleIcon}>G</Text>
           <Text style={styles.googleButtonText}>Login with Google</Text>
-        </Pressable>
+        </Pressable> */}
       </View>
     </View>
   );

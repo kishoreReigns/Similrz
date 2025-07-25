@@ -4,4 +4,5 @@ export type RootStackParamList = {
     Signup: undefined;
     Home: undefined;
     Profile: undefined;
+    StoryPage: { story: { image?: string; description?: string; video?: string } };
 };

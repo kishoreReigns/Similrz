@@ -7,6 +7,7 @@ import LoginPage from '../screens/LoginPage';
 import SignupPage from '../screens/SignupPage';
 import HomePage from '../screens/HomePage';
 import ProfilePage from '../screens/ProfilePage';
+import StoryPage from '../screens/StoryPage';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -18,6 +19,7 @@ const AppNavigator = () => (
       <Stack.Screen name="Signup" component={SignupPage} />
       <Stack.Screen name="Home" component={HomePage} />
       <Stack.Screen name="Profile" component={ProfilePage} />
+      <Stack.Screen name="StoryPage" component={StoryPage} />
     </Stack.Navigator>
   </NavigationContainer>
 );

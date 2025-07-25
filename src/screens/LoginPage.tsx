@@ -23,6 +23,8 @@ import Image6 from '../../assets/images/image6.svg';
 import Image8 from '../../assets/images/userimg8.svg';
 import { loginService } from '../services/authService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Feather from 'react-native-vector-icons/Feather';
+import Toast, { ToastConfigParams } from 'react-native-toast-message';
 
 const RadioButton = ({ selected, onPress }: { selected: boolean; onPress: () => void }) => (
   <TouchableOpacity
@@ -66,6 +68,7 @@ const LoginPage = () => {
   const [rememberMe, setRememberMe] = React.useState(true);
   const [userDetail, setUserDetail] = React.useState<any>(null);
   const [loading, setLoading] = React.useState(false);
+  const [showPassword, setShowPassword] = React.useState(false);
 
   React.useLayoutEffect(() => {
     navigation.setOptions({ headerShown: false });
@@ -77,6 +80,14 @@ const LoginPage = () => {
     console.log('Login API payload:', payload);
     const response = await loginService(payload);
     console.log('Login API response:', response);
+    if (response.userId == null) {
+      Toast.show({
+        type: 'error',
+        text1: 'Enter the valid details',
+      });
+      setLoading(false);
+      return;
+    }
     setUserDetail(response.userDetail);
     try {
       await AsyncStorage.setItem('userDetail', JSON.stringify(response.userDetail));
@@ -84,7 +95,6 @@ const LoginPage = () => {
       await AsyncStorage.setItem('AuthToken', JSON.stringify(response.authToken));
       const authToken = await AsyncStorage.getItem('AuthToken');
       console.log("authToken",authToken);
-      
       console.log('Stored userDetail in AsyncStorage:', stored);
     } catch (e) {
       console.error('AsyncStorage error:', e);
@@ -93,6 +103,27 @@ const LoginPage = () => {
     if (response.userDetail?.userProfile === true) {
       navigation.navigate('Home');
     }
+  };
+
+  const toastConfig = {
+    error: (params: ToastConfigParams<any>) => (
+      <View style={{
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#222',
+        borderRadius: 10,
+        padding: 12,
+        marginHorizontal: 16,
+        marginBottom: 40,
+        shadowColor: '#000',
+        shadowOpacity: 0.2,
+        shadowRadius: 6,
+        elevation: 4,
+      }}>
+        <Logo width={28} height={28} style={{ marginRight: 10 }} />
+        <Text style={{ color: '#fff', fontSize: 16, fontWeight: '600' }}>{params.text1}</Text>
+      </View>
+    ),
   };
 
   return (
@@ -124,13 +155,22 @@ const LoginPage = () => {
           <View style={styles.loginContainer}>
             <Text style={styles.title}>Login to continue</Text>
             <TextInput style={styles.input} placeholder="Email" value={email} onChangeText={setEmail} />
-            <TextInput
-              style={styles.input}
-              placeholder="Password"
-              secureTextEntry
-              value={password}
-              onChangeText={setPassword}
-            />
+            <View style={{ position: 'relative' }}>
+              <TextInput
+                style={styles.input}
+                placeholder="Password"
+                secureTextEntry={!showPassword}
+                value={password}
+                onChangeText={setPassword}
+              />
+              <TouchableOpacity
+                style={{ position: 'absolute', right: 15, top: 15 }}
+                onPress={() => setShowPassword(prev => !prev)}
+                accessibilityLabel={showPassword ? 'Hide password' : 'Show password'}
+              >
+                <Feather name={showPassword ? 'eye-off' : 'eye'} size={22} color="#888" />
+              </TouchableOpacity>
+            </View>
 
             <View style={styles.rememberContainer}>
               <RadioButton
@@ -169,6 +209,7 @@ const LoginPage = () => {
 )}
         </ScrollView>
       </KeyboardAvoidingView>
+      <Toast config={toastConfig} position="bottom" />
     </SafeAreaView>
   );
 };
